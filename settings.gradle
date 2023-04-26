@@ -1,0 +1,37 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        //noinspection JcenterRepositoryObsolete
+        jcenter()
+
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        resolutionStrategy {
+            eachPlugin {
+                if( requested.id.id == 'dagger.hilt.android.plugin') {
+                    useModule("com.google.dagger:hilt-android-gradle-plugin:2.39.1")
+                }
+            }
+        }
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        //noinspection JcenterRepositoryObsolete
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+rootProject.name = "Denso"
+include ':app'
+include ':DENSOScannerSDK'
+

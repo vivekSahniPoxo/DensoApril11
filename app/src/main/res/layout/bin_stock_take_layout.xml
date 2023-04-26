@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="2dp"
+        app:strokeWidth="1dp"
+        android:layout_marginTop="8dp"
+        app:cardMaxElevation="2dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:weightSum="8"
+        android:gravity="start|center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_rfid_tag_no"
+            style="@style/txt_hori_heading"
+            android:text="@string/rfid_tag"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/black"
+            android:layout_weight="4.2"/>
+
+        <TextView
+            android:id="@+id/tv_part_no"
+            style="@style/txt_hori_heading"
+            android:layout_weight="2"
+            android:textColor="@color/black"
+            android:text="@string/part_no"/>
+        <TextView
+            android:id="@+id/tv_part_lot_size"
+            style="@style/txt_hori_heading"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:text="@string/lot_size" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,126 @@
+<resources>
+    <string name="app_name">Denso</string>
+    <string name="user_id">User id</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="settings">Settings</string>
+    <string name="welcome">Welcome to Denso</string>
+    <string name="server_setting">Server Setting</string>
+    <string name="server_ip">Server IP</string>
+    <string name="port">Port</string>
+    <string name="save">Save</string>
+    <string name="back">Back</string>
+    <string name="select_one_option">Select One Option</string>
+    <string name="waiting_for_connection">Waiting for connection ....</string>
+    <string name="E_MSG_NO_CONNECTION">It is not connected to SP1</string>
+    <string name="bin_dispatch">Bin Dispatch</string>
+    <string name="bin_repair">Bin Repair</string>
+    <string name="bin_search">Bin Search</string>
+    <string name="stock_take">Stock Take</string>
+    <string name="bin_scrap">Bin Scrap</string>
+    <string name="bin_receiving">Bin Receiving</string>
+    <string name="name">Name</string>
+    <string name="start_reading">Start Reading</string>
+    <string name="pkg_part_no">Pkg group no</string>
+    <string name="part_no">Part No</string>
+    <string name="bin_qty">Bin Qty</string>
+    <string name="scanned_qty">Scanned Qty</string>
+    <string name="pending">Pending</string>
+    <string name="view">View</string>
+    <string name="confirm_dispatch">Confirm Dispatch</string>
+    <string name="rfid_tag">RFID TAG</string>
+    <string name="model">Model</string>
+    <string name="confirm_receiving">Confirm Receiving</string>
+    <string name="response">Response:</string>
+    <string name="enter_rfid">Enter RFID</string>
+    <string name="lot_size">Lot Size</string>
+    <string name="scrap">Scrap</string>
+    <string name="E_MSG_COMMUNICATION">Failed to communicate data with SP1</string>
+    <string name="connection_error">connection error</string>
+    <string name="I_READ_UNSPECIFIED_UII">Read unspecified UII</string>
+    <string name="E_MSG_VERSION_SP1">SP1 OS Ver%1$s\nPlease update to SP1 OS version 1.02 or later. This application may not work properly.</string>
+    <integer name="beep_sampling_rate_hz">44100</integer>
+    <integer name="beep_repeat_count">255</integer>
+    <string name="inventory">Inventory</string>
+    <string name="uii">UII</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="fragment_anonymous">fragment_anonymous</string>
+    <string name="MSG_ENABLE_PERMISSION">You need to enable permissions to use this feature.</string>
+    <string name="E_MSG_FILTER_OUT_OF_RANGE_PATTERN">Pattern can input up to 256 bits</string>
+    <string name="E_MSG_FILTER_INVALID_PATTERN">Please enter Pattern in hexadecimal</string>
+    <integer name="stage2_max_read_power_level_on_search">-36</integer>
+    <integer name="stage3_max_read_power_level_on_search">-49</integer>
+    <integer name="stage4_max_read_power_level_on_search">-63</integer>
+    <integer name="stage5_max_read_power_level_on_search">-75</integer>
+    <item name="beep_volume" format="float" type="dimen">1.0</item>
+    <string name="read">Read</string>
+    <string name="search">Search</string>
+    <string name="stop">Stop</string>
+    <string name="E_MSG_OVER_FLOW_BIT">Value can specify up to %d bit</string>
+    <string name="E_MSG_NOT_HEXADECIMAL">Value must be hexadecimal</string>
+    <string name="file_output">File Output</string>
+    <string name="clear">Clear</string>
+    <string name="start">Start</string>
+    <string name="total_tags">Total Tags</string>
+    <integer-array name="beep_frequencies_hz">
+        <item>2793</item>
+        <item>1396</item>
+        <item>1396</item>
+        <item>698</item>
+        <item>349</item>
+    </integer-array>
+    <integer-array name="beep_sound_durations_ms">
+        <item>100</item>
+        <item>100</item>
+        <item>100</item>
+        <item>100</item>
+        <item>100</item>
+    </integer-array>
+    <integer-array name="beep_silent_durations_ms">
+        <item>300</item>
+        <item>400</item>
+        <item>500</item>
+        <item>700</item>
+        <item>900</item>
+    </integer-array>
+    <integer-array name="locate_tag_read_power_levels">
+        <item>4</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+    </integer-array>
+
+    <string name="E_MSG_FILE_OUTPUT_COMPLETE">File output to the SP1 Sample folder is completed.</string>
+    <string name="E_MSG_FILE_OUTPUT_INCOMPLETE">File output to the SP1 Sample folder is incomplete.</string>
+    <string name="MSG_INPUT_FILE_NAME">Please input file name to output.</string>
+    <string name="E_MSG_NOT_DATA_TO_OUTPUT">List UII is empty.</string>
+    <item name="button_read_toggle_letter_spacing" format="float" type="dimen">0.1</item>
+    <string name="sample_text">ABCDEFGHIJKLMNOPQRSTUVWX</string>
+    <string name="rapid_read">Rapid Read</string>
+    <string name="read_tag_head">Read tag head</string>
+    <string name="number_0">Number_0</string>
+    <string name="time_00_00_00">00&#058;00&#058;00</string>
+    <string name="tags_per_second_unit">pcs&#047;s</string>
+    <string name="pcs">Pcs</string>
+    <string name="image_desc_tag_circle">Tag circle</string>
+    <string name="number_0_0">0.0</string>
+    <string name="read_power_level_unit">dBm</string>
+    <string name="transaction_date">Transaction Date</string>
+    <string name="customer">Customer</string>
+    <string name="disp_qty">Dispatch qty</string>
+    <string name="rec_qty">Receive qty</string>
+    <string name="til_date_balance">Til date balance</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="part_name">Part name</string>
+    <string name="shi_qty">Shi qty</string>
+    <string name="weight">Weight</string>
+    <string name="no_data_found">No data found</string>
+    <string name="backward_match">Backward Match</string>
+    <string name="forward_match">Forward Match</string>
+    <string name="confirmed">Confirmed</string>
+    <string name="start_scraping">Start Scraping</string>
+    <string name="confirm_scraping">Confirm Scraping</string>
+    <string name="start_reading_tags">Start Reading Tags</string>
+</resources>

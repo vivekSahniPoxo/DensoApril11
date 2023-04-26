@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".bin_recieving.BinReceiving">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+<!--        <ImageView-->
+<!--            android:id="@+id/im_back"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/ic_baseline_arrow_back" />-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bin_receiving"
+            android:textColor="@color/white"/>
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_start_reading"
+        style="@style/button_style"
+        android:layout_marginTop="12dp"
+        app:cornerRadius="16dp"
+        android:text="@string/start_reading_tags"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tool_bar"/>
+
+    <TextView
+        android:id="@+id/tv_read_tag"
+        style="@style/txt_view_heading_normal"
+        android:text="No of read tag:"
+        android:layout_marginStart="0dp"
+        app:layout_constraintStart_toStartOf="@+id/btn_start_reading"
+        app:layout_constraintTop_toBottomOf="@+id/btn_start_reading"/>
+
+    <TextView
+        android:id="@+id/no_read_tags"
+        style="@style/txt_view_heading_normal"
+        android:text="0"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_read_tag"
+        app:layout_constraintStart_toEndOf="@+id/tv_read_tag"
+        app:layout_constraintTop_toTopOf="@+id/tv_read_tag"/>
+<!--    <TextView-->
+<!--        style="@style/txt_view_heading_normal"-->
+<!--        android:text="1"-->
+<!--        android:layout_marginStart="0dp"-->
+<!--        android:layout_marginTop="0dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/tv_read_tag"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/no_read_tags"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/tv_read_tag"/>-->
+
+
+
+    <TextView
+        android:id="@+id/tv_invalid_tag"
+        style="@style/txt_view_heading_normal"
+        android:text="No of invalid tag:"
+        android:layout_marginStart="0dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/btn_start_reading"
+        app:layout_constraintTop_toBottomOf="@+id/tv_read_tag"/>
+
+    <TextView
+        android:id="@+id/no_invalid_tags"
+        style="@style/txt_view_heading_normal"
+        android:text="0/"
+        android:visibility="gone"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_invalid_tag"
+        app:layout_constraintStart_toEndOf="@+id/tv_invalid_tag"
+        app:layout_constraintTop_toTopOf="@+id/tv_invalid_tag"/>
+    <TextView
+        style="@style/txt_view_heading_normal"
+        android:text="0"
+        android:visibility="gone"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/no_invalid_tags"
+        app:layout_constraintStart_toEndOf="@+id/no_invalid_tags"
+        app:layout_constraintTop_toTopOf="@+id/no_invalid_tags"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:gravity="start|center"
+        android:background="@color/blue"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:weightSum="8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_invalid_tag">
+
+        <TextView
+            style="@style/txt_hori_heading"
+            android:text="@string/rfid_tag"
+            android:layout_marginStart="32dp"
+            android:layout_weight="3.8"/>
+
+<!--        <TextView-->
+<!--            style="@style/txt_hori_heading"-->
+<!--            android:text="@string/model"/>-->
+        <TextView
+            style="@style/txt_hori_heading"
+            android:layout_weight="1.72"
+            android:text="@string/part_no" />
+        <TextView
+            style="@style/txt_hori_heading"
+            android:text="@string/lot_size"/>
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_of_rfid_details"
+        android:layout_marginTop="224dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="164dp"
+        tools:listitem="@layout/bin_stock_take_layout"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/ll"/>
+    <View
+        android:id="@+id/divider_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_of_rfid_details"/>
+
+
+    <LinearLayout
+        android:id="@+id/ll_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="90dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cornerRadius="10dp"
+            android:text="@string/view"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/blue"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:cornerRadius="10dp"
+            android:text="@string/clear"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/blue" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_confirm_receiving"
+            style="@style/button_style"
+            android:textSize="13sp"
+            app:cornerRadius="8dp"
+            android:text="@string/confirm_receiving"/>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_response_heading"
+        style="@style/txt_view_heading"
+        android:layout_marginStart="0dp"
+        android:text="@string/response"
+        app:layout_constraintStart_toStartOf="@+id/ll_btn"
+        app:layout_constraintTop_toBottomOf="@+id/ll_btn"/>
+
+    <TextView
+        android:id="@+id/tv_response_"
+        style="@style/txt_view_heading"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_response_heading"
+        app:layout_constraintStart_toEndOf="@+id/tv_response_heading"
+        app:layout_constraintTop_toTopOf="@+id/tv_response_heading"/>
+
+
+    <TextView
+        android:id="@+id/tv_no_data_found"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:text="@string/no_data_found"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

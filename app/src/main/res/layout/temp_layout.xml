@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            style="@style/txt_hori_heading"
+            android:text="@string/transaction_date"/>
+
+        <TextView
+            style="@style/txt_hori_heading"
+            android:text="@string/customer"/>
+        <TextView
+            style="@style/txt_hori_heading"
+            android:text="@string/model" />
+        <TextView
+            style="@style/txt_hori_heading"
+            android:text="@string/part_no"/>
+
+        <TextView
+            style="@style/txt_hori_heading"
+            android:text="@string/disp_qty"/>
+
+        <TextView
+            style="@style/txt_hori_heading"
+            android:text="@string/rec_qty"/>
+
+        <TextView
+            style="@style/txt_hori_heading"
+            android:text="@string/til_date_balance"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_divider"
+        style="@style/linear_layout"
+        app:layout_constraintStart_toEndOf="@+id/ll"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+           style="@style/divider_line"
+            android:text="-"
+            />
+        <TextView
+            style="@style/divider_line"
+            android:text="-"
+            />
+        <TextView
+            style="@style/divider_line"
+            android:text="-"
+            />
+        <TextView
+            style="@style/divider_line"
+            android:text="-"
+            />
+        <TextView
+            style="@style/divider_line"
+            android:text="-"
+            />
+        <TextView
+            style="@style/divider_line"
+            android:text="-"
+            />
+
+        <TextView
+            style="@style/divider_line"
+            android:text="-"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/linear_layout"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@+id/ll_divider"
+        app:layout_constraintTop_toTopOf="@+id/ll">
+
+        <TextView
+            style="@style/txt_hori_heading"
+            android:text="@string/transaction_date"/>
+
+                <TextView
+                    style="@style/txt_hori_heading"
+                    android:text="@string/customer"/>
+                <TextView
+                    style="@style/txt_hori_heading"
+                    android:text="@string/model" />
+                <TextView
+                    style="@style/txt_hori_heading"
+                    android:text="@string/part_no"/>
+
+                <TextView
+                    style="@style/txt_hori_heading"
+                    android:text="@string/disp_qty"/>
+
+                <TextView
+                    style="@style/txt_hori_heading"
+                    android:text="@string/rec_qty"/>
+
+                <TextView
+                    style="@style/txt_hori_heading"
+                    android:text="@string/til_date_balance"/>
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
