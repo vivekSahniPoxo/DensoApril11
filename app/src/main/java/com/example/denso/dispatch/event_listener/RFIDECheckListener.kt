@@ -4,5 +4,5 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.denso.dispatch.model.BinDispatchDetails
 
 interface RFIDECheckListener {
-    fun onRfidListener(item:BinDispatchDetails.BinDispatchDetailsItem)
+    fun onRfidListener(item:BinDispatchDetails.BinDispatchDetailsItem,root:ConstraintLayout)
 }

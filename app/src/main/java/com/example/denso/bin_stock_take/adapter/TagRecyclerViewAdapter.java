@@ -400,7 +400,7 @@ public class TagRecyclerViewAdapter extends RecyclerView.Adapter<TagRecyclerView
 
      */
 
-    private static class TagData {
+    public static class TagData {
         private final int MAX_LINE_CHAR_NUM = 24;
 
         private String text = "";           // Text

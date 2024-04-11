@@ -37,6 +37,14 @@ class BinRepairRepository @Inject constructor(private val apies: Apies) {
     }
 
 
+    suspend fun binRepairOut(outRepairModel: ArrayList<BinRepairModel>) = flow{
+        emit(NetworkResult.Loading())
+        val response = apies.outFromBinRepairOutflow(outRepairModel)
+        emit(NetworkResult.Success(response))
+    }.catch { e->
+        emit(NetworkResult.Error(e.message ?: "UnknownError"))
+    }
+
 
 
     suspend fun binOutRepairModel(outRepairModel: ArrayList<BinRepairModel>){

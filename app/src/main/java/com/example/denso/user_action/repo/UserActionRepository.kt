@@ -24,6 +24,7 @@ class UserActionRepository @Inject constructor(private val allApies: Apies) {
             _getPlantNameResponseLiveData.postValue(NetworkResult.Loading())
               val response  = allApies.getPlantName()
             if (response.isSuccessful && response.body() !=null){
+               // _getPlantNameResponseLiveData.postValue(NetworkResult.Error("Wrong Url"))
                 _getPlantNameResponseLiveData.postValue(NetworkResult.Success(response.body()!!))
             } else if (response.errorBody() != null){
                 _getPlantNameResponseLiveData.postValue(NetworkResult.Error("Something Went Wrong"))
@@ -49,7 +50,7 @@ class UserActionRepository @Inject constructor(private val allApies: Apies) {
             }
 
         } catch (e:Exception){
-
+            _userResponseLiveData.postValue(NetworkResult.Error("UserId or Password wrong"))
         }
     }
 

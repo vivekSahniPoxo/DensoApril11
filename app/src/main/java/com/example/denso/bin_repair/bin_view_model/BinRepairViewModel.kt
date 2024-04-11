@@ -28,6 +28,10 @@ class BinRepairViewModel @Inject constructor(private val binRepairRepository: Bi
     val getResponseFromBinRepairIn:LiveData<NetworkResult<String>> = _getResponseFromBinRepairIn
 
 
+    private var _getResponseFromBinRepairOut = MutableLiveData<NetworkResult<String>>()
+    val getResponseFromBinRepairOt:LiveData<NetworkResult<String>> = _getResponseFromBinRepairOut
+
+
 
     fun binRepairStatus(binRepairModel: ArrayList<String>) {
         viewModelScope.launch {
@@ -45,6 +49,17 @@ class BinRepairViewModel @Inject constructor(private val binRepairRepository: Bi
     fun binRepairIn(binRepairModel:  ArrayList<BinRepairModel>){
         viewModelScope.launch {
             binRepairRepository.binRepairIn(binRepairModel).collect{
+                _getResponseFromBinRepairIn.postValue(it)
+            }
+        }
+    }
+
+
+
+
+    fun binRepairOutFlow(outRepairModel: ArrayList<BinRepairModel>){
+        viewModelScope.launch {
+            binRepairRepository.binRepairOut(outRepairModel).collect{
                 _getResponseFromBinRepairIn.postValue(it)
             }
         }

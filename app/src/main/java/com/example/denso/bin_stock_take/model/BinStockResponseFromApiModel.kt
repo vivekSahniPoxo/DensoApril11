@@ -18,6 +18,8 @@ class BinStockResponseFromApiModel : ArrayList<BinStockResponseFromApiModel.BinS
         @SerializedName("rfidNumber")
         val rfidNumber: String,
         @SerializedName("status")
-        val status: Int
+        val status: Int,
+        @SerializedName("binId")
+        val binId:String
     )
 }

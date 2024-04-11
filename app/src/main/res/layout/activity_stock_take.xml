@@ -25,6 +25,7 @@
             android:background="@drawable/ic_baseline_arrow_back" />
 
         <TextView
+            android:id="@+id/tv_stock_screen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/stock_take"
@@ -79,14 +80,14 @@
 
         <TextView
             style="@style/txt_hori_heading"
-            android:text="@string/rfid_tag"
+            android:text="Bin Id"
             android:layout_marginStart="18dp"
             android:layout_weight="4"/>
 
         <TextView
             style="@style/txt_hori_heading"
             android:layout_weight="2"
-            android:text="@string/part_no"/>
+            android:text="Group Name"/>
         <TextView
             style="@style/txt_hori_heading"
             android:layout_weight="2"
@@ -97,12 +98,12 @@
         android:id="@+id/list_of_stock_take"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="220dp"
+        android:layout_marginBottom="60dp"
         tools:listitem="@layout/bin_stock_take_layout"
         tools:itemCount="4"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
-        android:layout_marginBottom="70dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/ll"
         app:layout_constraintStart_toStartOf="parent"

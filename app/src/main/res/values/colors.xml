@@ -19,4 +19,8 @@
     <color name="red">#FF0000</color>
     <color name="tag_pale">#D9E7E6</color>
     <color name="blue_gray">#7393B3</color>
+    <color name="green2">#77DD77</color>
+
+    <color name="colorMatched">#00FF00</color> <!-- Green color for matched rows -->
+        <color name="colorUnmatched">#00FFFFFF</color> <!-- White color for unmatched rows -->
 </resources>

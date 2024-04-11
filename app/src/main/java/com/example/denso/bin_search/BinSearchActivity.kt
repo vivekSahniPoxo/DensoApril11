@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
@@ -30,6 +31,7 @@ import com.example.denso.utils.BeepAudioTracks
 import com.example.denso.utils.BeepAudioTracks.AudioTrackName
 import com.example.denso.utils.StringInputFragment
 import com.example.denso.utils.StringInputFragment.InputListener
+import java.math.BigInteger
 import java.util.*
 
 class BinSearchActivity : BaseActivity(), RFIDDataDelegate {
@@ -54,6 +56,7 @@ class BinSearchActivity : BaseActivity(), RFIDDataDelegate {
     var searchTagToggle: Button? = null
     lateinit var commParams: CommScannerParams
     var buzzer_setting: Buzzer? = null
+    lateinit var etBinId:EditText
 
     //    ImageView imBack;
     // endregion
@@ -63,6 +66,9 @@ class BinSearchActivity : BaseActivity(), RFIDDataDelegate {
         setContentView(R.layout.bin_search)
         scannerConnectedOnCreate = super.isCommScanner()
         commParams = CommScannerParams()
+
+        etBinId = findViewById(R.id.et_binID)
+
 
 //        imBack = findViewById(R.id.im_back);
 
@@ -272,8 +278,11 @@ class BinSearchActivity : BaseActivity(), RFIDDataDelegate {
     fun onClick(view: View) {
         val id = view.id
         when (id) {
-            R.id.button_read_search_tag -> runLocateTagAction(LocateTagAction.READ_SEARCH_TAG)
-            R.id.text_search_tag_uii_value -> editTagUII()
+            R.id.button_read_search_tag ->{
+                etBinId.isEnabled = false
+                runLocateTagAction(LocateTagAction.READ_SEARCH_TAG)
+            }
+//            R.id.text_search_tag_uii_value -> editTagUII()
             R.id.radio_button_forward_match -> matchingMethod = MatchingMethod.FORWARD
             R.id.radio_button_backward_match -> matchingMethod = MatchingMethod.BACKWARD
             R.id.button_search_tag_toggle -> {
@@ -472,8 +481,10 @@ class BinSearchActivity : BaseActivity(), RFIDDataDelegate {
             }
             LocateTagAction.STOP -> if (locateTagState == LocateTagState.READING_SEARCH_TAG) {
                 stopReadSearchTag()
+                etBinId.isEnabled = true
             } else if (locateTagState == LocateTagState.SEARCHING_TAG) {
                 stopSearchTag()
+                etBinId.isEnabled = true
             }
         }
     }
@@ -854,7 +865,8 @@ class BinSearchActivity : BaseActivity(), RFIDDataDelegate {
         private set(searchTagUII) {
             _searchTagUII = searchTagUII
             val textView = findViewById<View>(R.id.text_search_tag_uii_value) as TextView
-            textView.text = searchTagUII?.hexString
+//            textView.text = searchTagUII?.hexString
+            textView.text = stringToHex(etBinId.text.toString())
 
         }
 
@@ -1180,5 +1192,14 @@ class BinSearchActivity : BaseActivity(), RFIDDataDelegate {
             }
             return hexStringBuilder.toString()
         }
+    }
+
+
+
+    fun stringToHex(input: String): String {
+        val bytes = input.toByteArray(Charsets.UTF_8)
+        val bigInt = BigInteger(1, bytes)
+        val hexString = bigInt.toString(16).toUpperCase()
+        return hexString
     }
 }

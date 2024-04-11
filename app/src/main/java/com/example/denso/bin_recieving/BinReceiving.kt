@@ -1,15 +1,20 @@
 package com.example.denso.bin_recieving
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
+import android.view.Window
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
@@ -23,6 +28,7 @@ import com.densowave.scannersdk.RFID.RFIDDataReceivedEvent
 import com.example.denso.MainActivity
 import com.example.denso.R
 import com.example.denso.bin_repair.model.BinRepairModel
+import com.example.denso.bin_scrap.model.BinScrapModel
 import com.example.denso.bin_stock_take.adapter.BinStockTakeResponseFromApiAdapter
 import com.example.denso.bin_stock_take.adapter.TagRecyclerViewAdapter
 import com.example.denso.bin_stock_take.bin_stock_take_view_model.BinStockTakeViewModel
@@ -35,11 +41,14 @@ import com.example.denso.dispatch.model.CreateRfidStatus
 import com.example.denso.dispatch.model.RfidTag
 import com.example.denso.utils.BaseActivity
 import com.example.denso.utils.Cons
+import com.example.denso.utils.sharePreference.SharePref
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class BinReceiving : BaseActivity(),RFIDDataDelegate {
     lateinit var binding: ActivityBinRecievingBinding
+    lateinit var sharePref: SharePref
 
     private var nextReadAction = ReadAction.START
     private var handler: Handler? = Handler()
@@ -54,15 +63,20 @@ class BinReceiving : BaseActivity(),RFIDDataDelegate {
     lateinit var readRfidTags:ArrayList<String>
 
     private var isRefreshingShowRange = false
+    lateinit var dialogTag:Dialog
+    lateinit var mList: ArrayList<BinStockResponseFromApiModel.BinStockResponseFromApiModelItem>
 
 
 
 
     lateinit var  rfidListOfObject:ArrayList<RfidTag>
-    lateinit var scannedRfidTagNo:ArrayList<BinRepairModel>
+    lateinit var scannedRfidTagNo:ArrayList<BinReceivingDataModel>
 
 
     lateinit var binStockTakeResponseFromApiAdapter: BinStockTakeResponseFromApiAdapter
+
+    lateinit var binReceiveAdapter: BinReceiveAdapter
+    lateinit var mListRfidTag: ArrayList<RFidTagss>
 
     lateinit var progressDialog: ProgressDialog
 
@@ -73,14 +87,32 @@ class BinReceiving : BaseActivity(),RFIDDataDelegate {
         super.onCreate(savedInstanceState)
         binding = ActivityBinRecievingBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mList = arrayListOf()
+        sharePref = SharePref()
+
         readRfidTags = arrayListOf()
+        mListRfidTag = arrayListOf()
+        binReceiveAdapter = BinReceiveAdapter(mListRfidTag)
 
         scannedRfidTagNo = arrayListOf()
         rfidListOfObject  = arrayListOf()
+        binStockTakeResponseFromApiAdapter = BinStockTakeResponseFromApiAdapter(mList)
         scannerConnectedOnCreate = super.isCommScanner()
         progressDialog = ProgressDialog(this)
 
         initRecyclerView()
+
+
+        try {
+            sharePref = SharePref()
+            val savedBaseUrl = sharePref.getData("baseUrl")
+            if (savedBaseUrl != null && savedBaseUrl.isNotEmpty()) {
+                Cons.BASE_URL = savedBaseUrl
+                Log.d("baseURL", savedBaseUrl)
+            }
+        } catch (e: Exception) {
+            Log.d("exception", e.toString())
+        }
 
         if (scannerConnectedOnCreate) {
             try {
@@ -99,11 +131,19 @@ class BinReceiving : BaseActivity(),RFIDDataDelegate {
 
         binding.btnStartReading.setOnClickListener {
             runReadActionTag()
+            //binding.btnView.isEnabled = false
+
         }
 
         binding.btnView.setOnClickListener {
-            binStockTakeViewModel.binStockTake(readRfidTags)
-            bindObserverToGetBinStockTakeDetails()
+            binding.ll.isVisible  = true
+            binding.btnStartReading.text = "Start"
+            if (readRfidTags.isNotEmpty()) {
+                binStockTakeViewModel.binStockTake(readRfidTags)
+                bindObserverToGetBinStockTakeDetails()
+            } else{
+                Toast.makeText(this,"Please scann tags",Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.btnClear.setOnClickListener {
@@ -117,6 +157,8 @@ class BinReceiving : BaseActivity(),RFIDDataDelegate {
             scannedRfidTagNo.clear()
             binding.ll.isVisible  = false
             binding.noReadTags.text = ""
+            binReceiveAdapter.clearItems()
+            binStockTakeResponseFromApiAdapter.clear()
             clearDataDisplay()
 
 
@@ -125,9 +167,7 @@ class BinReceiving : BaseActivity(),RFIDDataDelegate {
 
 
         binding.btnConfirmReceiving.setOnClickListener {
-            val createStatus = CreateRfidStatus(rfidListOfObject)
-            dispatchViewModel.confirmReceiving(scannedRfidTagNo)
-            bindObserverToCreateRfidTagStatus()
+           dialogForTag()
         }
 
 //        binding.imBack.setOnClickListener {
@@ -161,34 +201,49 @@ class BinReceiving : BaseActivity(),RFIDDataDelegate {
     }
 
     private fun readData(rfidDataReceivedEvent: RFIDDataReceivedEvent) {
+       // val sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE)
+        val storedValue = sharePref.getData(Cons.userId)
+
 
         for (i in rfidDataReceivedEvent.rfidData.indices) {
             var data = ""
             val uii = rfidDataReceivedEvent.rfidData[i].uii
-            for (loop in uii.indices) {
-                data += String.format("%02X ", uii[loop]).trim { it <= ' ' }
+            for (loop in uii.indices) { data += String.format("%02X ", uii[loop]).trim { it <= ' ' }
             }
-               //readRfidTags.add("0x$data")
-            try {
-                adapter!!.addTag(data)
-            }catch (e:Exception){
+            //adapter!!.addTag(data)
 
-            }
-            readRfidTags.add(data)
 
-            val rfidTag = readRfidTags.distinct()
-            binding.noReadTags.text = rfidTag.size.toString()
-            scannedRfidTagNo.add(BinRepairModel(data,"3"))
+            //scannedRfidTagNo.add(data)
+
+
+
+            mListRfidTag.add(RFidTagss(data))
+            binReceiveAdapter = BinReceiveAdapter(mListRfidTag)
+            binding.listOfRfidDetails.adapter = binReceiveAdapter
+            binReceiveAdapter.notifyDataSetChanged()
+
+//            val rfidTag = readRfidTags.distinct()
+//            binding.noReadTags.text = rfidTag.size.toString()
+
+
+
+
+
+            if (!readRfidTags.contains(data)) {
+                readRfidTags.add(data)
+                scannedRfidTagNo.add(BinReceivingDataModel(data, "3", storedValue.toString()))
                 Log.d("readTag", "0x$data")
-            //binding.tvScrap.text = data
+                val rfidTag = readRfidTags.distinct()
+                binding.noReadTags.text = rfidTag.size.toString()
+            }
+
 
         }
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initRecyclerView() {
-
-
         // Specify this to improve performance since the size of RecyclerView is not changed
         val displayMetrics = DisplayMetrics()
         val params = binding.listOfRfidDetails.layoutParams
@@ -227,8 +282,7 @@ class BinReceiving : BaseActivity(),RFIDDataDelegate {
             }
 
             // Acquire the current scroll position.
-            val currentScrollPosition =
-                (recyclerView.layoutManager as LinearLayoutManager?)!!.findFirstVisibleItemPosition()
+            val currentScrollPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findFirstVisibleItemPosition()
 
             // Confirm whether it is necessary to update the display range, otherwise terminate the process.
             if (!adapter!!.needsRefreshShowRange(currentScrollPosition)) {
@@ -341,6 +395,8 @@ class BinReceiving : BaseActivity(),RFIDDataDelegate {
                 binding.apply {
 //                    btnClear.isEnabled = false
 //                    btnClear.setTextColor(getColor(R.color.white))
+                    binding.btnView.isEnabled = false
+                    binding.tvResponse.text = ""
                 }
 
                 // Tag reading starts
@@ -359,12 +415,15 @@ class BinReceiving : BaseActivity(),RFIDDataDelegate {
                 if (scannerConnectedOnCreate) {
                     try {
                         super.getCommScanner()!!.rfidScanner.close()
+                        binding.btnView.isEnabled = true
+                        binding.tvResponse.text = ""
                     } catch (e: Exception) {
                         super.showMessage(getString(R.string.E_MSG_COMMUNICATION))
                         e.printStackTrace()
                     }
                 }
                 binding.apply {
+                    binding.btnView.isEnabled = true
 //                    btnClear.isEnabled = true
 //                    btnClear.alpha = 0.2F
 //                    btnClear.setTextColor(getColor(R.color.text_default))
@@ -397,9 +456,12 @@ class BinReceiving : BaseActivity(),RFIDDataDelegate {
 
                     binding.tvNoDataFound.isVisible = it.data?.isEmpty() == true
 
-                        binStockTakeResponseFromApiAdapter =
-                            BinStockTakeResponseFromApiAdapter(it.data as ArrayList<BinStockResponseFromApiModel.BinStockResponseFromApiModelItem>)
+                        binStockTakeResponseFromApiAdapter = BinStockTakeResponseFromApiAdapter(it.data as ArrayList<BinStockResponseFromApiModel.BinStockResponseFromApiModelItem>)
                         binding.listOfRfidDetails.adapter = binStockTakeResponseFromApiAdapter
+
+
+
+
 
                 }
 
@@ -432,14 +494,61 @@ class BinReceiving : BaseActivity(),RFIDDataDelegate {
             when(it){
                 is NetworkResult.Success->{
                     //Toast.makeText(this,"SuccessFully Confirmed Dispatched",Toast.LENGTH_LONG).show()
-                    binding.tvResponse.text = Cons.SuccessFully_Confirmed
+
                     scannedRfidTagNo.clear()
+                    binding.tvResponse.text = ""
+                    readRfidTags.clear()
+                    scannedRfidTagNo.clear()
+                    rfidListOfObject.clear()
+                    binReceiveAdapter.clearItems()
+                    binStockTakeResponseFromApiAdapter.clear()
+                    binStockTakeResponseFromApiAdapter.notifyDataSetChanged()
+                    binding.listOfRfidDetails.adapter?.notifyDataSetChanged()
+                    adapter?.clearTags()
+                    adapter?.notifyDataSetChanged()
+                    scannedRfidTagNo.clear()
+                    binding.ll.isVisible  = true
+                    binding.noReadTags.text = ""
+                    clearDataDisplay()
+
+                    binding.tvResponse.text = it.data.toString()
+                    Toast.makeText(this,it.data.toString(),Toast.LENGTH_LONG).show()
+
+
                 }
 
-                is NetworkResult.Error->{Toast.makeText(this,it.message,Toast.LENGTH_LONG).show()}
+                is NetworkResult.Error->{
+                    Toast.makeText(this,it.message,Toast.LENGTH_LONG).show()}
                 is NetworkResult.Loading->{
                     showProgressbar()
                 } } })
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    private fun dialogForTag() {
+        dialogTag = Dialog(this)
+        dialogTag.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogTag.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogTag.setContentView(R.layout.layout_for_confirmation)
+        dialogTag.setCancelable(true)
+        dialogTag.show()
+
+        val cancel: MaterialButton = dialogTag.findViewById(R.id.btn_cancel)
+
+        cancel.setOnClickListener {
+            dialogTag.dismiss()
+
+        }
+
+        val yes: MaterialButton = dialogTag.findViewById(R.id.bt_yes)
+        yes.setOnClickListener {
+            //val createStatus = CreateRfidStatus(rfidListOfObject)
+            dispatchViewModel.confirmReceiving(scannedRfidTagNo)
+            bindObserverToCreateRfidTagStatus()
+            dialogTag.dismiss()
+
+        }
     }
 
 }

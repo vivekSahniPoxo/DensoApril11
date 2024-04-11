@@ -1,6 +1,7 @@
 package com.example.denso
 
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -40,9 +41,15 @@ import com.example.denso.bin_stock_take.StockTake
 import com.example.denso.databinding.ActivityMainBinding
 import com.example.denso.dispatch.DispatchActivity
 import com.example.denso.internet_connection.ConnectionNetworkViewModel
+import com.example.denso.settings.SettingActivity
+import com.example.denso.shanku.ShankuReceivedActivity
+import com.example.denso.shanku.ShankyuDispatchActivity
+import com.example.denso.user_action.UserActivity
 import com.example.denso.utils.BaseActivity
 import com.example.denso.utils.BeepAudioTracks
 import com.example.denso.utils.Cons
+import com.example.denso.utils.sharePreference.SharePref
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -51,6 +58,8 @@ class MainActivity : AppCompatActivity(), ScannerAcceptStatusListener, RFIDDataD
     lateinit var binding: ActivityMainBinding
     lateinit var baseActivity: BaseActivity
     var context: Context? = null
+
+    lateinit var dialog:Dialog
 
     private val readHandler = Handler()
 
@@ -65,6 +74,7 @@ class MainActivity : AppCompatActivity(), ScannerAcceptStatusListener, RFIDDataD
     private val networkViewModel: ConnectionNetworkViewModel by viewModels()
 
     lateinit var internetDialog: Dialog
+    lateinit var sharePref: SharePref
 
     override fun onCreate(savedInstanceState: Bundle?) {
         internetDialog = Dialog(this)
@@ -72,16 +82,39 @@ class MainActivity : AppCompatActivity(), ScannerAcceptStatusListener, RFIDDataD
         internetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        sharePref = SharePref()
         // Set the TOP-Activity
          baseActivity.setTopActivity(true)
         setContentView(binding.root)
+
+        dialog = Dialog(this)
 
 
         // Service is started in the back ground.
         baseActivity.startService()
         scannerConnectedOnCreate = baseActivity.isCommScanner()
 
+        binding.imLogout.setOnClickListener {
+            dialogLogOut()
 
+        }
+
+
+        binding.mChangeBaseUrl.setOnClickListener {
+            val intent = Intent(this@MainActivity, SettingActivity::class.java)
+            startActivity(intent)
+            //finish()
+        }
+
+        binding.mCardViewSix.setOnClickListener {
+            val intent = Intent(this@MainActivity, ShankuReceivedActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.mCardViewSeven.setOnClickListener {
+            val intent = Intent(this@MainActivity, ShankyuDispatchActivity::class.java)
+            startActivity(intent)
+        }
 
 
 
@@ -156,9 +189,13 @@ class MainActivity : AppCompatActivity(), ScannerAcceptStatusListener, RFIDDataD
         }
 
         binding.mCardViewThree.setOnClickListener {
+
             val intent = Intent(this@MainActivity, StockTake::class.java)
+            val bundle = Bundle()
+            bundle.putBoolean("isCommingFromStock",true)
             CommManager.endAccept()
             CommManager.removeAcceptStatusListener(this@MainActivity)
+            intent.putExtras(bundle)
             startActivity(intent)
         }
 
@@ -446,7 +483,37 @@ class MainActivity : AppCompatActivity(), ScannerAcceptStatusListener, RFIDDataD
     }
 
 
+    @SuppressLint("SetTextI18n")
+    private fun dialogLogOut() {
+        dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.logout_dialog)
+        dialog.setCancelable(true)
+        dialog.show()
 
+
+        val cancel: MaterialButton = dialog.findViewById(R.id.btnLogNo)
+
+        cancel.setOnClickListener {
+            dialog.dismiss()
+
+        }
+
+        val yes: MaterialButton = dialog.findViewById(R.id.btnLogOutYes)
+        yes.setOnClickListener {
+            dialog.dismiss()
+            sharePref.logOut()
+            val intent = Intent(this,UserActivity::class.java)
+            startActivity(intent)
+            finish()
+
+            // disPatchItem(rfidListOfObject)
+
+
+
+        }
+    }
 
 
 

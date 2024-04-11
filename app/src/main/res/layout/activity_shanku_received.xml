@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".shanku.ShankuReceivedActivity">
+
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/im_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:background="@drawable/ic_baseline_arrow_back" />
+
+        <TextView
+            android:id="@+id/tv_stock_screen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shankyu Receive"
+            android:textColor="@color/white"/>
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_start_reading"
+        style="@style/button_style"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        app:cornerRadius="16dp"
+        android:elevation="8dp"
+        android:text="@string/start_reading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tool_bar"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+    <TextView
+        android:id="@+id/tv_read_tag"
+        style="@style/txt_view_heading_normal"
+        android:text="Total tag count:"
+        android:layout_marginStart="0dp"
+        app:layout_constraintStart_toStartOf="@+id/btn_start_reading"
+        app:layout_constraintTop_toBottomOf="@+id/btn_start_reading"/>
+
+    <TextView
+        android:id="@+id/no_read_tags"
+        style="@style/txt_view_heading_normal"
+        android:text="0"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_read_tag"
+        app:layout_constraintStart_toEndOf="@+id/tv_read_tag"
+        app:layout_constraintTop_toTopOf="@+id/tv_read_tag"/>
+
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:background="@color/blue"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:weightSum="8"
+        android:visibility="gone"
+        android:gravity="start|center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_read_tag">
+
+        <TextView
+            style="@style/txt_hori_heading"
+            android:text="Bin Id"
+            android:layout_marginStart="18dp"
+            android:layout_weight="4"/>
+
+        <TextView
+            style="@style/txt_hori_heading"
+            android:layout_weight="2"
+            android:text="Group Name"/>
+        <TextView
+            style="@style/txt_hori_heading"
+            android:layout_weight="2"
+            android:text="@string/lot_size" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_of_stock_take"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="180dp"
+        android:layout_marginBottom="60dp"
+        tools:listitem="@layout/bin_stock_take_layout"
+        tools:itemCount="4"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/ll"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!--    -->
+    <!--    <View-->
+    <!--        android:id="@+id/divider_line"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="1dp"-->
+    <!--        android:background="@color/blue_gray"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/list_of_stock_take"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"/>-->
+
+
+    <LinearLayout
+        android:id="@+id/ll_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cornerRadius="10dp"
+            android:text="Submit"
+            android:visibility="gone"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/blue"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cornerRadius="10dp"
+            android:text="Submit"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/blue"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:cornerRadius="10dp"
+            android:text="@string/clear"
+            android:visibility="gone"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/blue" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_no_data_found"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

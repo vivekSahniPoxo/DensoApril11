@@ -1,9 +1,12 @@
 package com.example.denso.user_action
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -17,11 +20,13 @@ import com.example.denso.databinding.ActivityUserBinding
 import com.example.denso.dispatch.DispatchActivity
 import com.example.denso.dispatch.model.BinDispatchDetails
 import com.example.denso.dispatch.model.RfidTag
+import com.example.denso.settings.SettingActivity
 import com.example.denso.user_action.adapter.GetPlantResponseAdapter
 import com.example.denso.user_action.model.PlantName
 import com.example.denso.user_action.view_model.UserActionViewModel
 import com.example.denso.utils.Cons
 import com.example.denso.utils.NetworkResult
+import com.example.denso.utils.sharePreference.SharePref
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,16 +36,62 @@ class UserActivity : AppCompatActivity() {
     private var selectedEmp: Int = 0
     private val userActionViewModel:UserActionViewModel by viewModels()
     lateinit var progressDialog:ProgressDialog
+    lateinit var sharePref: SharePref
+
+    private val handler = Handler(Looper.getMainLooper())
+
     lateinit var getPlantResponseAdapter: GetPlantResponseAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding =  ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        sharePref = SharePref()
 
         progressDialog = ProgressDialog(this)
 
         plantId = arrayListOf()
         plantId.add("Choose")
+
+
+        try {
+            sharePref = SharePref()
+            val savedBaseUrl = sharePref.getData("baseUrl")
+            if (savedBaseUrl != null && savedBaseUrl.isNotEmpty()) {
+                Cons.BASE_URL = savedBaseUrl
+                Log.d("baseURL", savedBaseUrl)
+            }
+        } catch (e: Exception) {
+            Log.d("exception", e.toString())
+        }
+
+
+//        try {
+//            //if (Cons.BASE_URL.isEmpty()) {
+//                if (sharePref.getData(Cons.BASE_URL).toString().isNotEmpty()) {
+//                    Cons.BASE_URL = sharePref.getData(Cons.BASE_URL).toString()
+//                //}
+//            } else{
+//                Cons.BASE_URL = "http://192.168.10.11:4555"
+//            }
+//        } catch (e:Exception){
+//
+//        }
+
+//        if (sharePref.getData("userId")?.isNotEmpty() == true){
+//            val intent = Intent(this,MainActivity::class.java)
+//            startActivity(intent)
+//            finish()
+//        } else{
+//            val intent = Intent(this,UserActivity::class.java)
+//            startActivity(intent)
+//            finish()
+//        }
+
+        binding.imSetting.setOnClickListener {
+            val intent = Intent(this@UserActivity, SettingActivity::class.java)
+            startActivity(intent)
+            //finish()
+        }
 
         userActionViewModel.getPlantName()
         bindObserverToGetPlantId()
@@ -102,6 +153,10 @@ class UserActivity : AppCompatActivity() {
                 }
                 is NetworkResult.Loading->{
                     showProgressbar()
+                    handler.postDelayed({
+                        hideProgressbar()
+                        Toast.makeText(this,"Failed to connect", Toast.LENGTH_LONG).show()
+                    },5000)
                 }
             }
         })
@@ -126,14 +181,26 @@ class UserActivity : AppCompatActivity() {
             hideProgressbar()
             when(it){
                 is NetworkResult.Success->{
-                    Toast.makeText(this,it.message, Toast.LENGTH_LONG).show()
+//                    val sharedPreferences = getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE)
+//                    val editor = sharedPreferences.edit()
+//                    editor.putString("userID", binding.etUserId.text.toString())
+//                    editor.apply()
+                    sharePref.saveData(Cons.userId,binding.etUserId.text.toString())
+
+                    val errorMessage = it.message
+                    if (errorMessage != null) {
+                        Toast.makeText(this@UserActivity, errorMessage, Toast.LENGTH_LONG).show()
+                    } else {
+                        // If the message is null, show a generic error message
+                        Toast.makeText(this@UserActivity, "An error occurred", Toast.LENGTH_LONG).show()
+                    }
+                    //Toast.makeText(this,it.message, Toast.LENGTH_LONG).show()
                     val intent = Intent(this,MainActivity::class.java)
                     startActivity(intent)
                     finish()
-
-
                 }
                 is NetworkResult.Error->{
+                    hideProgressbar()
                     Toast.makeText(this,it.message, Toast.LENGTH_LONG).show()
                 }
                 is NetworkResult.Loading->{
@@ -141,6 +208,23 @@ class UserActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        try {
+            sharePref = SharePref()
+            val savedBaseUrl = sharePref.getData("baseUrl")
+            if (savedBaseUrl != null && savedBaseUrl.isNotEmpty()) {
+                Cons.BASE_URL = savedBaseUrl
+                Log.d("baseURL", savedBaseUrl)
+            }
+        } catch (e: Exception) {
+            Log.d("exception", e.toString())
+        }
+        userActionViewModel.getPlantName()
+        bindObserverToGetPlantId()
     }
 
 

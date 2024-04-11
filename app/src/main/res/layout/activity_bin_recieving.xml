@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -110,7 +111,7 @@
 
         <TextView
             style="@style/txt_hori_heading"
-            android:text="@string/rfid_tag"
+            android:text="Bin Id"
             android:layout_marginStart="32dp"
             android:layout_weight="3.8"/>
 
@@ -120,7 +121,7 @@
         <TextView
             style="@style/txt_hori_heading"
             android:layout_weight="1.72"
-            android:text="@string/part_no" />
+            android:text="Group Name" />
         <TextView
             style="@style/txt_hori_heading"
             android:text="@string/lot_size"/>
@@ -130,7 +131,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_of_rfid_details"
-        android:layout_marginTop="224dp"
+        android:layout_marginTop="200dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="16dp"
@@ -175,6 +176,8 @@
             android:layout_marginStart="8dp"
             app:cornerRadius="10dp"
             android:text="@string/clear"
+            android:visibility="gone"
+
             android:textAllCaps="false"
             android:backgroundTint="@color/blue" />
         <com.google.android.material.button.MaterialButton

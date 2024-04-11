@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
     <application
         android:name=".hiltAppplication.HiltApplication"
@@ -17,7 +19,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Denso"
         android:usesCleartextTraffic="true"
+        android:largeHeap="true"
         tools:targetApi="31">
+        <activity
+            android:name=".shanku.ShankyuDispatchActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".shanku.ShankuReceivedActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".settings.SettingActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".dispatch.DispatchActivity"
             android:exported="false">

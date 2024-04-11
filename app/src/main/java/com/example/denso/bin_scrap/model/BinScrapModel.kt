@@ -7,4 +7,5 @@ data class BinScrapModel(
     @SerializedName("rfidNo")
     val rfidNo: String,
 
+
 )

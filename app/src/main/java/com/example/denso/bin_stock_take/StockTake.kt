@@ -10,6 +10,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
@@ -28,10 +29,13 @@ import com.example.denso.bin_stock_take.adapter.TagRecyclerViewAdapter
 import com.example.denso.bin_stock_take.bin_stock_take_view_model.BinStockTakeViewModel
 import com.example.denso.bin_stock_take.model.BinStockResponseFromApiModel
 import com.example.denso.databinding.ActivityStockTakeBinding
+import com.example.denso.dispatch.RFIDNo
 import com.example.denso.dispatch.dispatch_utils.ReadAction
+import com.example.denso.dispatch.model.RfidTag
 import com.example.denso.utils.BaseActivity
 import com.example.denso.utils.Cons
 import com.example.denso.utils.NetworkResult
+import com.example.denso.utils.sharePreference.SharePref
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -63,10 +67,15 @@ class StockTake : BaseActivity(),RFIDDataDelegate {
 
     lateinit var rfidDataReceivedEvent: RFIDDataReceivedEvent
 
+    lateinit var rfidList:ArrayList<String>
+
+    lateinit var sharePref: SharePref
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStockTakeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        rfidList = arrayListOf()
 
         scannedRfidTagNo  =  arrayListOf()
         allRfidTagsno = arrayListOf()
@@ -79,6 +88,54 @@ class StockTake : BaseActivity(),RFIDDataDelegate {
         scannerConnectedOnCreate = super.isCommScanner()
 
         rfidDataReceivedEvent = RFIDDataReceivedEvent(list)
+
+
+        try {
+            sharePref = SharePref()
+            val savedBaseUrl = sharePref.getData("baseUrl")
+            if (savedBaseUrl != null && savedBaseUrl.isNotEmpty()) {
+                Cons.BASE_URL = savedBaseUrl
+                Log.d("baseURL", savedBaseUrl)
+            }
+        } catch (e: Exception) {
+            Log.d("exception", e.toString())
+        }
+
+
+
+
+        try {
+            if (intent.getBooleanExtra("isCommingFromScrep", true)) {
+                rfidList = intent.getSerializableExtra(Cons.RFID) as ArrayList<String>
+                binding.btnStartReading.isVisible = false
+                binding.tvReadTag.isVisible = false
+                binding.noReadTags.isVisible = false
+                binding.btnView.isVisible = false
+                binding.btnClear.isVisible = false
+                binding.tvStockScreen.text = "Scrap View"
+
+                val recyclerView: RecyclerView =
+                    binding.listOfStockTake // Reference to your RecyclerView
+                val marginTopInPixels = 192 // Set the desired margin top in pixels
+
+                val layoutParams = recyclerView.layoutParams as ViewGroup.MarginLayoutParams
+                layoutParams.setMargins(
+                    layoutParams.leftMargin,
+                    marginTopInPixels,
+                    layoutParams.rightMargin,
+                    layoutParams.bottomMargin
+                )
+
+                recyclerView.layoutParams = layoutParams
+
+                binStockTakeViewModel.binStockTake(rfidList)
+                bindObserverToGetBinStockTakeDetails()
+            }
+        } catch (e:Exception){
+
+        }
+
+
 
         if (scannerConnectedOnCreate) {
             try {
@@ -105,6 +162,7 @@ class StockTake : BaseActivity(),RFIDDataDelegate {
             }
             btnView.setOnClickListener {
                 //allRfidTagsno = scannedRfidTagNo
+                binding.btnStartReading.text = "Start"
                 if (scannedRfidTagNo.isNotEmpty()) {
                     binStockTakeViewModel.binStockTake(scannedRfidTagNo)
                     bindObserverToGetBinStockTakeDetails()
@@ -171,6 +229,7 @@ class StockTake : BaseActivity(),RFIDDataDelegate {
                 binding.apply {
 //                    btnClear.isEnabled = false
 //                    btnClear.setTextColor(getColor(R.color.white))
+                    btnView.isEnabled = false
                 }
 
                 // Tag reading starts
@@ -198,6 +257,7 @@ class StockTake : BaseActivity(),RFIDDataDelegate {
 //                    btnClear.isEnabled = true
 //                    btnClear.alpha = 0.2F
 //                    btnClear.setTextColor(getColor(R.color.text_default))
+                    btnView.isEnabled = true
                 }
 
             }
@@ -219,8 +279,11 @@ class StockTake : BaseActivity(),RFIDDataDelegate {
             val uii = rfidDataReceivedEvent.rfidData[i].uii
             for (loop in uii.indices) { data += String.format("%02X ", uii[loop]).trim { it <= ' ' }
             }
-            adapter!!.addTag(data)
-            scannedRfidTagNo.add(data)
+
+            if (!scannedRfidTagNo.contains(data)) {
+                scannedRfidTagNo.add(data)
+                adapter!!.addTag(data)
+            }
 
         }
     }
@@ -262,8 +325,6 @@ class StockTake : BaseActivity(),RFIDDataDelegate {
      */
     @SuppressLint("NotifyDataSetChanged")
     private fun initRecyclerView() {
-
-
         // Specify this to improve performance since the size of RecyclerView is not changed
         val displayMetrics = DisplayMetrics()
         val params = binding.listOfStockTake.layoutParams
@@ -446,8 +507,7 @@ class StockTake : BaseActivity(),RFIDDataDelegate {
 //                    clearDataDisplay()
                       if (it.data?.isEmpty() == true){
                           binding.tvNoDataFound.isVisible=true }
-                        binStockTakeResponseFromApiAdapter =
-                            BinStockTakeResponseFromApiAdapter(it.data as ArrayList<BinStockResponseFromApiModel.BinStockResponseFromApiModelItem>)
+                        binStockTakeResponseFromApiAdapter = BinStockTakeResponseFromApiAdapter(it.data as ArrayList<BinStockResponseFromApiModel.BinStockResponseFromApiModelItem>)
                         binding.listOfStockTake.adapter = binStockTakeResponseFromApiAdapter
                     binding.ll.isVisible = true
 

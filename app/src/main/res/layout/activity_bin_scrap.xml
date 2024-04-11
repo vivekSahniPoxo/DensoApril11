@@ -16,6 +16,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+
+
+
+
+
 <!--        <ImageView-->
 <!--            android:id="@+id/im_back"-->
 <!--            android:layout_width="wrap_content"-->
@@ -38,6 +43,7 @@
         android:layout_marginEnd="18dp"
         android:gravity="start|center"
         android:paddingStart="8pt"
+        android:visibility="gone"
         android:layout_marginTop="12dp"
         android:background="@drawable/edittext_bg"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,14 +52,33 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_start_scraping"
         style="@style/button_style"
-        android:layout_width="150dp"
-        android:layout_marginTop="2dp"
+        android:layout_width="match_parent"
+        android:layout_marginTop="12dp"
         android:layout_marginBottom="2dp"
         app:cornerRadius="16dp"
         android:elevation="8dp"
         android:text="@string/start_scraping"
-        app:layout_constraintEnd_toEndOf="@+id/tv_scrap"
-        app:layout_constraintTop_toBottomOf="@+id/tv_scrap"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tool_bar"/>
+
+
+    <TextView
+        android:id="@+id/tv_read_tag"
+        style="@style/txt_view_heading_normal"
+        android:text="Total tag count:"
+        android:layout_marginStart="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/btn_start_scraping"
+        app:layout_constraintStart_toStartOf="@+id/btn_start_scraping"/>
+
+    <TextView
+        android:id="@+id/no_read_tags"
+        style="@style/txt_view_heading_normal"
+        android:text="0"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_read_tag"
+        app:layout_constraintStart_toEndOf="@+id/tv_read_tag"
+        app:layout_constraintTop_toTopOf="@+id/tv_read_tag"/>
 
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -95,26 +120,60 @@
         android:id="@+id/tv_respone_heading"
         style="@style/txt_view_heading"
         android:text="@string/response"
-        app:layout_constraintTop_toBottomOf="@+id/ll"
+        app:layout_constraintTop_toBottomOf="@+id/no_read_tags"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
         android:id="@+id/tv_response"
         style="@style/txt_view_heading_normal"
         android:layout_marginTop="0dp"
-        android:text="Invalid RFID"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="@+id/tv_respone_heading"
         app:layout_constraintTop_toTopOf="@+id/tv_respone_heading"
         app:layout_constraintStart_toEndOf="@+id/tv_respone_heading"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_confirm_scraping"
-        style="@style/button_style"
-        android:text="@string/confirm_scraping"
-        android:layout_marginTop="12dp"
+
+    <LinearLayout
+        android:id="@+id/ll3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/tv_response"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_view"
+            style="@style/button_style"
+            android:text="View"
+            android:layout_marginTop="12dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_confirm_scraping"
+            style="@style/button_style"
+            android:text="@string/confirm_scraping"
+            android:layout_marginTop="12dp"/>
+
+    </LinearLayout>
+
+
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_0f_Rfid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/inventory_tag"
+        tools:itemCount="4"
+        android:layout_marginTop="250dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/ll3"
+        app:layout_constraintStart_toStartOf="@+id/ll3"
+        app:layout_constraintEnd_toEndOf="@+id/ll3"/>
 
 
 <!--    <androidx.recyclerview.widget.RecyclerView-->

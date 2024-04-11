@@ -35,7 +35,8 @@
     <string name="enter_rfid">Enter RFID</string>
     <string name="lot_size">Lot Size</string>
     <string name="scrap">Scrap</string>
-    <string name="E_MSG_COMMUNICATION">Failed to communicate data with SP1</string>
+    <!--    <string name="E_MSG_COMMUNICATION">Failed to communicate data with SP1</string>-->
+    <string name="E_MSG_COMMUNICATION">SP1 disconnected</string>
     <string name="connection_error">connection error</string>
     <string name="I_READ_UNSPECIFIED_UII">Read unspecified UII</string>
     <string name="E_MSG_VERSION_SP1">SP1 OS Ver%1$s\nPlease update to SP1 OS version 1.02 or later. This application may not work properly.</string>
@@ -123,4 +124,6 @@
     <string name="start_scraping">Start Scraping</string>
     <string name="confirm_scraping">Confirm Scraping</string>
     <string name="start_reading_tags">Start Reading Tags</string>
+    <string name="location">Location</string>
+    <string name="submit">Submit</string>
 </resources>

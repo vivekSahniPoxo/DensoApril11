@@ -8,6 +8,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent">-->
+
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/ll"
         android:layout_width="wrap_content"
@@ -27,6 +35,7 @@
         <TextView
             android:id="@+id/tv_pkg_part_no"
             android:layout_width="76dp"
+            android:layout_marginStart="4dp"
             style="@style/txt_hori_heading"
             android:textColor="@color/black"
             android:text="@string/pkg_part_no" />
@@ -57,8 +66,32 @@
             android:layout_marginStart="24dp"
             android:layout_gravity="center" />
 
+
+
+
+
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
+
+    <LinearLayout
+        android:id="@+id/ll2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="12dp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll">
+
+        <TextView
+            android:id="@+id/tv_rfid_no"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -67,9 +100,9 @@
         android:background="@color/gray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll"/>
+        app:layout_constraintTop_toBottomOf="@+id/ll2"/>
 
 
 
-
+<!--    </androidx.cardview.widget.CardView>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

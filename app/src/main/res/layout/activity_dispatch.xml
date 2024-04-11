@@ -16,6 +16,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <TextView
+            android:id="@+id/tags"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
         <ImageView
             android:id="@+id/im_back"
             android:layout_width="wrap_content"
@@ -35,7 +41,7 @@
         <TextView
             android:id="@+id/autoCompleteTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:inputType="none"
             android:padding="4pt"
             android:textAllCaps="false"
@@ -61,8 +67,10 @@
         app:layout_constraintStart_toStartOf="@+id/autoCompleteTextView" />
 
     <TextView
+        android:id="@+id/tv_cust_name"
         style="@style/txt_view_heading"
-        android:layout_marginStart="8dp"
+        android:layout_width="170dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="0dp"
         android:textSize="11sp"
         android:textStyle="normal"
@@ -71,7 +79,31 @@
         app:layout_constraintTop_toTopOf="@+id/im_person"
         app:layout_constraintStart_toEndOf="@+id/im_person"/>
 
-      <com.google.android.material.button.MaterialButton
+
+    <ImageView
+        android:id="@+id/im_location"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/placeholder"
+        app:layout_constraintTop_toBottomOf="@+id/im_person"
+        app:layout_constraintStart_toStartOf="@+id/im_person" />
+
+    <TextView
+        android:id="@+id/tv_location"
+        style="@style/txt_view_heading"
+        android:layout_width="170dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="0dp"
+        android:textSize="11sp"
+        android:textStyle="normal"
+        android:text="@string/location"
+        app:layout_constraintBottom_toBottomOf="@+id/im_location"
+        app:layout_constraintTop_toTopOf="@+id/im_location"
+        app:layout_constraintStart_toEndOf="@+id/im_location"/>
+
+
+    <com.google.android.material.button.MaterialButton
           android:id="@+id/btn_start_reading"
           android:layout_width="wrap_content"
           style="@style/button_style"
@@ -86,8 +118,8 @@
         android:text="No of read tag:"
         android:layout_marginStart="0dp"
 
-        app:layout_constraintStart_toStartOf="@+id/im_person"
-        app:layout_constraintTop_toBottomOf="@+id/im_person"/>
+        app:layout_constraintStart_toStartOf="@+id/im_location"
+        app:layout_constraintTop_toBottomOf="@+id/im_location"/>
 
     <TextView
         android:id="@+id/no_read_tags"
@@ -99,15 +131,26 @@
         app:layout_constraintStart_toEndOf="@+id/tv_read_tag"
         app:layout_constraintTop_toTopOf="@+id/tv_read_tag"/>
     <TextView
-        android:id="@+id/tv_total_tag_list"
+        android:id="@+id/tv_slash"
         style="@style/txt_view_heading_normal"
-        android:text="/0"
-        android:visibility="gone"
+        android:text="/"
+        android:visibility="visible"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_read_tag"
         app:layout_constraintStart_toEndOf="@+id/no_read_tags"
         app:layout_constraintTop_toTopOf="@+id/tv_read_tag"/>
+
+    <TextView
+        android:id="@+id/tv_total_tag_list"
+        style="@style/txt_view_heading_normal"
+        android:text="0"
+        android:visibility="visible"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_slash"
+        app:layout_constraintStart_toEndOf="@+id/tv_slash"
+        app:layout_constraintTop_toTopOf="@+id/tv_slash"/>
 
 
 
@@ -122,21 +165,33 @@
     <TextView
         android:id="@+id/no_invalid_tags"
         style="@style/txt_view_heading_normal"
-        android:text="0/"
+        android:text="0"
         android:layout_marginStart="3dp"
         android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_invalid_tag"
         app:layout_constraintStart_toEndOf="@+id/tv_invalid_tag"
         app:layout_constraintTop_toTopOf="@+id/tv_invalid_tag"/>
+
     <TextView
-        android:id="@+id/tv_total_tag_list_two"
+        android:id="@+id/slash"
         style="@style/txt_view_heading_normal"
-        android:text="0"
-        android:layout_marginStart="0dp"
+        android:text="/"
+        android:visibility="gone"
+        android:layout_marginStart="3dp"
         android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/no_invalid_tags"
         app:layout_constraintStart_toEndOf="@+id/no_invalid_tags"
         app:layout_constraintTop_toTopOf="@+id/no_invalid_tags"/>
+    <TextView
+        android:id="@+id/tv_total_tag_list_two"
+        style="@style/txt_view_heading_normal"
+        android:text="0"
+        android:visibility="gone"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/slash"
+        app:layout_constraintStart_toEndOf="@+id/slash"
+        app:layout_constraintTop_toTopOf="@+id/slash"/>
 
 <!--    <View-->
 <!--        android:id="@+id/top_divide_line"-->
@@ -170,12 +225,12 @@
             style="@style/txt_hori_heading"
             android:layout_marginStart="0dp"
             android:layout_weight="1.3"
-            android:text="Pkg group no" />
+            android:text="Pkg group Name" />
 
-        <TextView
-            style="@style/txt_hori_heading"
-            android:layout_weight="1.2"
-            android:text="@string/shi_qty" />
+<!--        <TextView-->
+<!--            style="@style/txt_hori_heading"-->
+<!--            android:layout_weight="1.2"-->
+<!--            android:text="@string/shi_qty" />-->
 
         <TextView
             style="@style/txt_hori_heading"
@@ -185,25 +240,27 @@
         <TextView
             style="@style/txt_hori_heading"
             android:layout_weight="1.2"
-            android:text="ctn" />
+            android:text="Bin Qty" />
 
-        <TextView
-            style="@style/txt_hori_heading"
-            android:text="Weight" />
+<!--        <TextView-->
+<!--            style="@style/txt_hori_heading"-->
+<!--            android:text="Weight" />-->
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_of_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="280dp"
         android:layout_marginStart="18dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="18dp"
-        tools:listitem="@layout/dispatch_item_layout"
+        android:background="@drawable/row_background"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll"
+        tools:listitem="@layout/dispatch_item_layout" />
 
 <!--    <LinearLayout-->
 <!--        android:id="@+id/ll"-->
@@ -357,6 +414,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             app:cornerRadius="10dp"
+            android:visibility="gone"
             android:text="@string/clear"
             android:textAllCaps="false"
             android:backgroundTint="@color/blue" />
@@ -380,5 +438,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:indeterminate="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
